@@ -7,22 +7,86 @@ To write a program to predict the type of species of the Iris flower using the S
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. 
-2. 
-3. 
-4. 
+1. Initialize Parameters: Set initial weights (theta) to zero.
+2. Compute Predictions: Calculate predictions using the sigmoid function on the weighted inputs.
+3. Calculate Cost: Compute the cost using the cross-entropy loss function.
+4. Update Weights: Adjust weights by subtracting the gradient of the cost with respect to each weight.
+5. Repeat: Repeat steps 2–4 for a set number of iterations or until convergence is achieved.
 
 ## Program:
 ```
 /*
 Program to implement the prediction of iris species using SGD Classifier.
-Developed by: 
-RegisterNumber:  
+Developed by: SHERIL P
+RegisterNumber: 212225230262 
 */
+```
+```
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+data = pd.read_csv("Placement_Data.csv")
+
+X = data.drop(["status", "salary", "sl_no"], axis=1)
+y = data["status"]
+
+X = pd.get_dummies(X, drop_first=True)
+
+feature_names = X.columns
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+scaler = StandardScaler()
+X_train_scaled = pd.DataFrame(
+    scaler.fit_transform(X_train),
+    columns=feature_names
+)
+X_test_scaled = pd.DataFrame(
+    scaler.transform(X_test),
+    columns=feature_names
+)
+
+model = SGDClassifier(max_iter=1000, tol=1e-3, random_state=42)
+
+model.fit(X_train_scaled, y_train)
+
+y_pred = model.predict(X_test_scaled)
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+new_student_dict = dict.fromkeys(feature_names, 0)
+
+new_student_dict['ssc_p'] = 67
+new_student_dict['hsc_p'] = 91
+new_student_dict['degree_p'] = 58
+new_student_dict['etest_p'] = 88
+new_student_dict['mba_p'] = 67
+
+new_student_df = pd.DataFrame([new_student_dict])
+
+new_student_scaled = pd.DataFrame(
+    scaler.transform(new_student_df),
+    columns=feature_names
+)
+
+pred = model.predict(new_student_scaled)
+print("\nPredicted Status:", pred[0])
 ```
 
 ## Output:
-![prediction of iris species using SGD Classifier](sam.png)
+![alt text](<Screenshot 2026-02-03 093725.png>)
 
 
 ## Result:
